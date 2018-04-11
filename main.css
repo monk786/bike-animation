@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+}
+#game {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+#game img.terrain {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+#game img.bike {
+    position: absolute;
+    z-index: 2;
+}
