@@ -27,6 +27,22 @@
 
         getScale: function(originalValue, currentValue) {
             return ( originalValue > currentValue ? -1 : 1 ) * ( Math.min(originalValue, currentValue) / ( Math.max(originalValue, currentValue) ) );
+        },
+
+        randomize: function(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+
+            while (0 !== currentIndex) {
+
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
         }
     };
 
@@ -134,8 +150,6 @@
             "tablet": "./assets/images/race_background_tablet.png"
         },
 
-        // easeAnimation: CustomEase.create("custom", "M0,0 C0.017,0 0.034,0.017 0.051,0.018 0.092,0.019 0.168,0.063 0.21,0.05 0.281,0.059 0.297,0.105 0.349,0.124 0.434,0.154 0.498,0.224 0.55,0.248 0.613,0.277 0.617,0.388 0.662,0.416 0.715,0.449 0.745,0.497 0.796,0.544 0.856,0.599 0.936,0.673 1,1"),
-
         easeAnimation: Power1.easeIn,
 
         step: 0,
@@ -158,6 +172,26 @@
         }
     };
 
+    var Timer = {
+        time: 0, 
+
+        start: function() {
+
+        },
+
+        resume: function() {
+
+        },
+
+        pause: function() {
+
+        },
+        
+        reset: function() {
+
+        }
+    };
+
     var Game = {
         rider: "",
 
@@ -169,19 +203,42 @@
 
         level: 0,
 
-        render: function() {
-            
+        questions: [],
+
+        error: {
+            questions: false,
+            terrain: false,
+            bike: false
+        },
+
+        timer: Timer,
+
+        fetchQuestions: function() {
+            Data.fetch("/questions").then(function(response) {
+                console.log(Game.questions);
+            }, function(err) {
+                console.log(err);
+            })
         },
 
         run: function() {
-            Game.firstLevel();    
+            console.log(Game.error);
+            if ( !Game.error.questions && !Game.error.terrain && !Game.error.bike ) {
+                Game.firstLevel();
+            } else {
+               /** TODO: Handle errors */
+            } 
+        },
+
+        showQuestion: function() {
+            console.log(Game.questions[Game.level-1]);
         },
 
         firstLevel: function() {
             var yPos = -(bgImage.clientHeight - Terrain.step);
             Terrain.position = yPos;
             Game.level++;
-            TweenMax.to(bgImage, 2, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" } });
+            TweenMax.to(bgImage, 2, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.showQuestion });
         },
 
         levelUp: function() {
@@ -192,7 +249,7 @@
             if (Game.level === 10) {
                 TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
             } else {
-                TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" } });
+                TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.showQuestion });
             }
         },
 
@@ -201,9 +258,55 @@
         }
     };
 
+    var Data = {
+        endpoint: "http://com.22feetlabs.com/heroBikeGame/api",
+
+        fetch: function(url) {
+            return new Promise(function( resolve, reject ) {
+
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                        if (xmlhttp.status == 200) {
+                            try {
+                                var response = JSON.parse(xmlhttp.responseText);
+                                Game.questions = Util.randomize(response.questionsData);
+                                resolve();
+                            } catch (err) {
+                                Game.error.questions = true;
+                                console.log("Error while fetching questions");
+                                reject();
+                            }
+                        }
+                        else if (xmlhttp.status == 400) {
+                            Game.error.questions = true;
+                            console.log("Error while fetching questions");
+                            reject();
+                        }
+                        else {
+                            Game.error.questions = true;
+                            console.log("Error while fetching questions");
+                            reject();
+                        }
+                    }
+                };
+
+                xmlhttp.open("GET", Data.endpoint + url, true);
+                xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+                xmlhttp.setRequestHeader("Access-Control-Allow-Credentials", "true");
+                xmlhttp.send();
+                
+            });
+        }
+    };
+
     bgImage.onload = function() {
         Game.background = true;
         Terrain.render();
+    };
+    bgImage.onerror = function() {
+        Game.error.terrain = true;
     };
     bgImage.src = Util.getBackgroundImage();
     bgImage.className = "terrain";
@@ -212,8 +315,13 @@
         Game.bike = true;
         Bike.render();
     };
+    bikeAtlas.onerror = function() {
+        Game.error.bike = true;
+    };
     bikeAtlas.className = "bike";
     bikeAtlas.src = Bike.image;
+
+    Game.fetchQuestions();
 
     /** TODO: Remove these lines */
     window.Game = Game;
