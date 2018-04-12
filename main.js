@@ -37,6 +37,8 @@
             return [ Bike.positions[0][0] * bgImage.clientWidth, vh - ( Bike.positions[0][1] * bgImage.clientHeight ) ];
         },
 
+        position: [0, 0],
+
         positions: [
             [ 0.47011, 0.00707 ]
         ],
@@ -80,21 +82,36 @@
 
         },
 
+        setToNormal: function() {
+            var bike = Bike.container;
+            Bike.orientation = "normal";
+
+            bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
+        },
+
         sway: function() {
             var bike = Bike.container;
 
             bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
             bike.style.width = "121px";
             bike.style.height = "188px";
+            Bike.turn();
+        },
+
+        turn: function() {
+            console.log(Bike.position);
+            Bike.position = [ ( Bike.orientation === "left" ? Bike.position[0] - (0.05 * bgImage.clientWidth) : Bike.position[0] + (0.05 * bgImage.clientWidth) ), Bike.position[1]];
+            console.log(Bike.position);
+            TweenMax.to(Bike.container, 0.5, { css: { transform: "translate("+ Bike.position[0] +"px, " + Bike.position[1] + "px)" }, onComplete: Bike.setToNormal });
         },
 
         firstLevel: function() {
             var startPos = Bike.setStartPosition();
-
+            Bike.position = [startPos[0] - Bike.dimensions.normal.cx, startPos[1] - Bike.dimensions.normal.cy];
             var bike = Bike.container;
 
             bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
-            bike.style.transform = "translate("+ ( startPos[0] - Bike.dimensions.normal.cx ) +"px, " + ( startPos[1] - Bike.dimensions.normal.cy ) + "px)";
+            bike.style.transform = "translate("+ Bike.position[0] +"px, " + Bike.position[1] + "px)";
             bike.className = "bike";
             bike.style.width = "121px";
             bike.style.height = "188px";
@@ -168,7 +185,7 @@
         levelUp: function() {
             var yPos = Terrain.position = -(Math.abs(Terrain.position) - Terrain.step);
             Game.level++;
-            Bike.orientation = Game.level % 2 === 0 ? "left" : "right";
+            Bike.orientation = Game.level % 2 === 0 ? "left" : "right"; // TODO: random or according to path
             Bike.sway();
             if (Game.level === 10) {
                 TweenMax.to(bgImage, 4, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
