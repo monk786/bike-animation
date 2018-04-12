@@ -33,20 +33,36 @@
         image: "./assets/images/bikes.png",
 
         setStartPosition: function() {
-            return [ Bike.positions[0][0] * bgImage.clientWidth * Math.abs(Terrain.scale), vh - ( Bike.positions[0][1] * bgImage.clientHeight * Math.abs(Terrain.scale) ) ];
+            // return [ Bike.positions[0][0] * bgImage.clientWidth * Math.abs(Terrain.scale), vh - ( Bike.positions[0][1] * bgImage.clientHeight * Math.abs(Terrain.scale) ) ];
+            return [ Bike.positions[0][0] * bgImage.clientWidth, vh - ( Bike.positions[0][1] * bgImage.clientHeight ) ];
         },
 
         positions: [
-            [ 0.3985, 0.0079 ]
+            [ 0.47011, 0.00707 ]
         ],
+
+        rider: [
+            {
+                name: "C S Santhosh",
+                image: {
+                    normal: [-98, 0],
+                    left: [0, 0],
+                    right: [-218, 0]
+                }
+            }
+        ],
+
+        container: document.createElement("div"),
+
+        selectedRider: 0,
 
         /** TODO: set dimensions using a bike in the atlas sheet */
         dimensions: {
             width: 98,
             height: 219,
             normal: {
-                cx: 49,
-                cy: 109.5
+                cx: 32.5,
+                cy: 49
             },
             left: {
                 cx: 49,
@@ -58,12 +74,36 @@
             }
         },
 
+        orientation: "normal",
+
+        scaleBike: function() {
+
+        },
+
+        sway: function() {
+            var bike = Bike.container;
+
+            bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
+            bike.style.width = "121px";
+            bike.style.height = "188px";
+        },
+
+        firstLevel: function() {
+            var startPos = Bike.setStartPosition();
+
+            var bike = Bike.container;
+
+            bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
+            bike.style.transform = "translate("+ ( startPos[0] - Bike.dimensions.normal.cx ) +"px, " + ( startPos[1] - Bike.dimensions.normal.cy ) + "px)";
+            bike.className = "bike";
+            bike.style.width = "121px";
+            bike.style.height = "188px";
+            Game.arena.appendChild(bike);
+        },
+
         render: function() {
             if ( Game.background ) {
-                var startPos = Bike.setStartPosition();
-                console.log(startPos);
-                bikeAtlas.style.transform = "translate("+ ( startPos[0] - Bike.dimensions.normal.cx ) +"px, " + ( startPos[1] - Bike.dimensions.normal.cy ) + "px)";
-                Game.arena.appendChild(bikeAtlas);
+                Bike.firstLevel();
             } else {
                 setTimeout(Bike.render, 100);
             }
@@ -76,6 +116,8 @@
             "mobile": "./assets/images/race_background_mobile.png",
             "smartphone": "./assets/images/race_background_tablet.png"
         },
+
+        // easeAnimation: CustomEase.create("custom", "M0,0,C0.266,0.412,0.453,0.831,0.582,0.952,0.626,0.993,0.78,1,1,1"),
 
         step: 0,
 
@@ -126,15 +168,13 @@
         levelUp: function() {
             var yPos = Terrain.position = -(Math.abs(Terrain.position) - Terrain.step);
             Game.level++;
+            Bike.orientation = Game.level % 2 === 0 ? "left" : "right";
+            Bike.sway();
             if (Game.level === 10) {
-                TweenMax.to(bgImage, 2, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
+                TweenMax.to(bgImage, 4, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
             } else {
-                TweenMax.to(bgImage, 2, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
+                TweenMax.to(bgImage, 4, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
             }
-        },
-
-        turnBike: function(direction) {
-
         },
 
         complete: function() {
@@ -151,7 +191,7 @@
 
     bikeAtlas.onload = function() {
         Game.bike = true;
-        //Bike.render();
+        Bike.render();
     };
     bikeAtlas.className = "bike";
     bikeAtlas.src = Bike.image;

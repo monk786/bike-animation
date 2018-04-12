@@ -12,7 +12,7 @@ body {
     position: absolute;
     z-index: 1;
 }
-#game img.bike {
+#game .bike {
     position: absolute;
     z-index: 2;
 }
