@@ -15,4 +15,7 @@ body {
 #game .bike {
     position: absolute;
     z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
 }
