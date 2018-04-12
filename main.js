@@ -25,7 +25,7 @@
         },
 
         getScale: function(originalValue, currentValue) {
-            return originalValue > currentValue ? -(originalValue/currentValue) : currentValue/originalValue;
+            return ( originalValue > currentValue ? -1 : 1 ) * ( Math.min(originalValue, currentValue) / ( Math.max(originalValue, currentValue) ) );
         }
     };
 
@@ -33,7 +33,7 @@
         image: "./assets/images/bikes.png",
 
         setStartPosition: function() {
-            return [ Bike.positions[0][0] * bgImage.clientWidth * Terrain.scale, vh - ( Bike.positions[0][1] * bgImage.clientHeight * Terrain.scale ) ];
+            return [ Bike.positions[0][0] * bgImage.clientWidth * Math.abs(Terrain.scale), vh - ( Bike.positions[0][1] * bgImage.clientHeight * Math.abs(Terrain.scale) ) ];
         },
 
         positions: [
@@ -61,6 +61,7 @@
         render: function() {
             if ( Game.background ) {
                 var startPos = Bike.setStartPosition();
+                console.log(startPos);
                 bikeAtlas.style.transform = "translate("+ ( startPos[0] - Bike.dimensions.normal.cx ) +"px, " + ( startPos[1] - Bike.dimensions.normal.cy ) + "px)";
                 Game.arena.appendChild(bikeAtlas);
             } else {
@@ -76,6 +77,10 @@
             "smartphone": "./assets/images/race_background_tablet.png"
         },
 
+        step: 0,
+
+        position: 0,
+
         scale: 1,
 
         render: function() {
@@ -83,10 +88,12 @@
             Game.arena.appendChild(bgImage);
 
             Terrain.scale = Util.getScale(bgImage.naturalHeight, bgImage.clientHeight);
+            Terrain.step = bgImage.clientHeight / 10;
 
             startPos = -( bgImage.height - vh );
+            Terrain.position = startPos;
             bgImage.style.transform = "translate(0px, " + startPos + "px)";
-            setTimeout(Game.run, 5000);
+            setTimeout(Game.run, 2000);
         }
     };
 
@@ -99,16 +106,31 @@
 
         bike: false,
 
+        level: 0,
+
         render: function() {
             
         },
 
         run: function() {
-            TweenMax.to(bgImage, 10, { ease: Power4.easeOut, css: { transform: "translate(0px, 0px)" }, onComplete: Game.complete });
+            Game.firstLevel();    
+        },
+
+        firstLevel: function() {
+            var yPos = -(bgImage.clientHeight - Terrain.step);
+            Terrain.position = yPos;
+            Game.level++;
+            TweenMax.to(bgImage, 2, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
         },
 
         levelUp: function() {
-
+            var yPos = Terrain.position = -(Math.abs(Terrain.position) - Terrain.step);
+            Game.level++;
+            if (Game.level === 10) {
+                TweenMax.to(bgImage, 2, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
+            } else {
+                TweenMax.to(bgImage, 2, { ease: Power4.easeOut, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
+            }
         },
 
         turnBike: function(direction) {
@@ -129,7 +151,7 @@
 
     bikeAtlas.onload = function() {
         Game.bike = true;
-        Bike.render();
+        //Bike.render();
     };
     bikeAtlas.className = "bike";
     bikeAtlas.src = Bike.image;
