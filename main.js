@@ -17,7 +17,7 @@
 
             for ( var pltfrm in Platform ) {
                 if ( Platform[pltfrm].matches ) {
-                    platform = pltfrm;
+                    Game.platform = platform = pltfrm;
                     break;
                 }
             }
@@ -51,24 +51,35 @@
 
         position: [0, 0],
 
-        positions: [
-            [ 0.47011, 0.00707 ]
-        ],
+        positions: {
+            mobile: [ 0, 0.0029],
+            tablet: [0.47011, 0.0038],
+            desktop: [0, 0.0045],
+            largeDesktop: [0, 0.0045]
+        },
 
         rider: [
             {
                 name: "C S Santhosh",
                 image: {
-                    normal: [-98, 0],
+                    normal: [-112, 0],
                     left: [0, 0],
-                    right: [-218, 0]
+                    right: [-230, 0]
+                }
+            },
+            {
+                name: "Oriel Meena",
+                image: {
+                    normal: [-623, 0],
+                    left: [-517, 0],
+                    right: [-733, 0]
                 }
             }
         ],
 
         container: document.createElement("div"),
 
-        selectedRider: 0,
+        selectedRider: 1,
 
         /** TODO: set dimensions using a bike in the atlas sheet */
         dimensions: {
@@ -90,12 +101,8 @@
 
         orientation: "normal",
 
-        scaleBike: function() {
-
-        },
-
         getStartPosition: function() {
-            return [ Bike.positions[0][0] * bgImage.clientWidth, Bike.positions[0][1] * bgImage.clientHeight ];
+            return [ 0, Bike.positions[Game.platform][1] * bgImage.clientHeight ];
         },
 
         setToNormal: function() {
@@ -116,12 +123,12 @@
 
         turn: function() {
             Bike.position = [ ( Bike.orientation === "left" ? -(0.05 * bgImage.clientWidth) : (0.05 * bgImage.clientWidth) ), 0];
-            TweenMax.to(Bike.container, 0.5, { css: { transform: "scale(" + bgImage.clientHeight / 25083 + ") translate("+ Bike.position[0] +"px, " + Bike.position[1] + "px)" }, onComplete: Bike.setToNormal });
+            TweenMax.to(Bike.container, 1.5, { css: { transform: "scale(" + bgImage.clientHeight / 49047 + ") translate("+ Bike.position[0] +"px, " + Bike.position[1] + "px)" }, onComplete: Bike.setToNormal });
         },
 
         renderOnStartPosition: function() {
             var startPos = Bike.getStartPosition();
-            Bike.position = [startPos[0] - Bike.dimensions.normal.cx, startPos[1] - Bike.dimensions.normal.cy];
+            Bike.position = [startPos[0], startPos[1]];
             var bike = Bike.container;
 
             bike.style.background = "url(" + Bike.image + ") " + Bike.rider[Bike.selectedRider].image[Bike.orientation][0] + "px " + Bike.rider[Bike.selectedRider].image[Bike.orientation][1] + "px";
@@ -129,7 +136,7 @@
             bike.className = "bike";
             bike.style.width = "121px";
             bike.style.height = "188px";
-            bike.style.transform = "scale(" + bgImage.clientHeight / 25083 + ")";
+            bike.style.transform = "scale(" + bgImage.clientHeight / 49047 + ")";
             Game.arena.appendChild(bike);
         },
 
@@ -144,13 +151,13 @@
 
     var Terrain = {
         images: {
-            "largeDesktop": "./assets/images/race_background_large_desktop.png",
-            "desktop": "./assets/images/race_background_desktop.png",
-            "mobile": "./assets/images/race_background_mobile.png",
-            "tablet": "./assets/images/race_background_tablet.png"
+            "largeDesktop": "./assets/images/race_background_large_desktop.jpg",
+            "desktop": "./assets/images/race_background_desktop.jpg",
+            "mobile": "./assets/images/race_background_mobile.jpg",
+            "tablet": "./assets/images/race_background_tablet.jpg"
         },
 
-        easeAnimation: Power1.easeIn,
+        easeAnimation: Power1.easeInOut,
 
         step: 0,
 
@@ -168,32 +175,37 @@
             var startPos = -( bgImage.height - vh );
             Terrain.position = startPos;
             bgImage.style.transform = "translate(0px, " + startPos + "px)";
-            setTimeout(Game.run, 2000);
         }
     };
 
     var Timer = {
-        time: 0, 
+        time: 0,
+        
+        currentQuestionTime: 0,
 
         start: function() {
-
+            Timer.currentQuestionTime = new Date();
         },
 
-        resume: function() {
-
+        end: function() {
+            var now = new Date();
+            var elapsedTime =  ( now - Timer.currentQuestionTime ) / 1000;
+            Timer.time += elapsedTime;
         },
 
-        pause: function() {
-
+        penalty: function() {
+            Timer.time += 15;
         },
         
         reset: function() {
-
+            Timer.time = 0;
         }
     };
 
     var Game = {
         rider: "",
+
+        userData: {},
 
         arena: document.getElementById("game"),
 
@@ -205,24 +217,29 @@
 
         questions: [],
 
+        platform: "desktop",
+
         error: {
             questions: false,
             terrain: false,
-            bike: false
+            bike: false,
+            submit: false
         },
 
         timer: Timer,
 
         fetchQuestions: function() {
-            Data.fetch("/questions").then(function(response) {
-                console.log(Game.questions);
+            Data.fetch("/userData").then(function(response) {
+                Game.userData = response.userInfo.shift();
+                Game.questions = Util.randomize(response.userInfo);
+                console.log("Game questions ready");
             }, function(err) {
-                console.log(err);
+                Game.error.questions = true;
+                console.log("Error while fetching questions");
             })
         },
 
         run: function() {
-            console.log(Game.error);
             if ( !Game.error.questions && !Game.error.terrain && !Game.error.bike ) {
                 Game.firstLevel();
             } else {
@@ -230,8 +247,18 @@
             } 
         },
 
+        checkAnswer: function(answer) {
+            if (answer) {
+                setTimeout(Timer.end, 0);
+            } else {
+                setTimeout(Timer.penalty, 0);
+            }
+            Game.levelUp();
+        },
+
         showQuestion: function() {
-            console.log(Game.questions[Game.level-1]);
+            console.log(Game.questions[Game.level - 1]);
+            setTimeout(Timer.start, 0);
         },
 
         firstLevel: function() {
@@ -245,7 +272,7 @@
             var yPos = Terrain.position = -(Math.abs(Terrain.position) - Terrain.step);
             Game.level++;
             Bike.orientation = Game.level % 2 === 0 ? "left" : "right"; // TODO: random or according to path
-            setTimeout(Bike.sway, 2000);
+            setTimeout(Bike.sway, 1000);
             if (Game.level === 10) {
                 TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.complete });    
             } else {
@@ -253,8 +280,31 @@
             }
         },
 
+        /** TODO: Remove keyup listeners */
+        listeners: function() {
+            document.addEventListener("keyup", function(e) {
+                switch(e.which) {
+                    case 37: Game.checkAnswer(true); break;
+                    case 38: Game.run(); break;
+                    case 39: Game.checkAnswer(false); break;
+                    case 40: console.log(Timer.time); break;
+                }
+            });
+        },
+
+        selectRider: function(index) {
+            Game.selectedRider = index;
+        },
+
         complete: function() {
-            console.log("done");
+            var data = { userId: "123ABC", time: Timer.time }; /** TODO: Replace with actual data */
+            data = encodeURIComponent(JSON.stringify(data));
+            Data.post("/getscoredetails", data).then(function(response) {
+
+            }, function(error) {
+                Game.error.submit = true;
+                /** TODO: Handle submit error */
+            });
         }
     };
 
@@ -271,22 +321,16 @@
                         if (xmlhttp.status == 200) {
                             try {
                                 var response = JSON.parse(xmlhttp.responseText);
-                                Game.questions = Util.randomize(response.questionsData);
-                                resolve();
+                                resolve(response);
                             } catch (err) {
-                                Game.error.questions = true;
-                                console.log("Error while fetching questions");
                                 reject();
                             }
                         }
                         else if (xmlhttp.status == 400) {
-                            Game.error.questions = true;
-                            console.log("Error while fetching questions");
+                            
                             reject();
                         }
                         else {
-                            Game.error.questions = true;
-                            console.log("Error while fetching questions");
                             reject();
                         }
                     }
@@ -295,8 +339,29 @@
                 xmlhttp.open("GET", Data.endpoint + url, true);
                 xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
                 xmlhttp.setRequestHeader("Access-Control-Allow-Credentials", "true");
+                xmlhttp.setRequestHeader("authToken", "Basic SGVyb21vdG9zcG9ydHM6SE1TQDIwMTgh")
                 xmlhttp.send();
                 
+            });
+        },
+
+        post: function(url, data) {
+            return new Promise(function( resolve, reject ) {
+
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        console.log(xmlhttp.responseText);
+                    }
+                }
+
+                xmlhttp.open("POST", Data.endpoint + url, true);
+                xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+                xmlhttp.setRequestHeader("Access-Control-Allow-Credentials", "true");
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send(data);
+
             });
         }
     };
@@ -322,10 +387,12 @@
     bikeAtlas.src = Bike.image;
 
     Game.fetchQuestions();
+    Game.listeners();
 
     /** TODO: Remove these lines */
     window.Game = Game;
     window.Bike = Bike;
     window.Terrain = Terrain;
+    window.Timer = Timer;
 
 })();
