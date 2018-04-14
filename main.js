@@ -83,41 +83,244 @@
 			}
 		],
 
-		paths: [
-			{ delay: 1, duration: 2, displacement: 0.25, direction: "left" },
-			{ delay: 0.5, duration: 2, displacement: 0.05, direction: "right" },
-			{ delay: 1.3, duration: 2, displacement: 0.102, direction: "left" },
-			{ delay: 0.5, duration: 2, displacement: 0.102, direction: "right" },
-			{ direction: "normal" },
-			{ delay: 1.3, duration: 2, displacement: 0.102, direction: "left" },
-			{ delay: 0.5, duration: 2, displacement: 0.05, direction: "right" },
-			{ direction: "normal" },
-			{ delay: 1.3, duration: 2, displacement: 0.102, direction: "left" },
-            { direction: "normal" },
-            { direction: "normal" }
-		],
+		paths: {
+			mobile: [
+				{
+					delay: 1,
+					duration: 2,
+					displacement: 0.25,
+					direction: "left"
+				}, //1
+				{
+					delay: 1.5,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				},
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				}, //3
+				{
+					delay: 0.5,
+					duration: 2,
+					displacement: 0.102,
+					direction: "right"
+				},
+				{ direction: "normal" }, //5
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 2,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				}, //7
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 1,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				}, //9
+				{ direction: "normal" },
+				{ direction: "normal" } //11
+			],
+			tablet: [
+				{ delay: 1, duration: 2, displacement: 0.1, direction: "left" }, //1
+				{
+					delay: 1.8,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				},
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				}, //3
+				{
+					delay: 1,
+					duration: 2,
+					displacement: 0.102,
+					direction: "right"
+				},
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.05,
+					direction: "left"
+				}, //5
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 2,
+					duration: 2,
+					displacement: 0.005,
+					direction: "right"
+				}, //7
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 1.5,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				}, //9
+				{ direction: "normal" },
+				{ direction: "normal" } //11
+			],
+			desktop: [
+				{
+					delay: 0.5,
+					duration: 2,
+					displacement: 0.1,
+					direction: "left"
+				}, //1
+				{
+					delay: 1.8,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				},
+				{
+					delay: 0.8,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				}, //3
+				{
+					delay: 1,
+					duration: 2,
+					displacement: 0.02,
+					direction: "right"
+				},
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.05,
+					direction: "left"
+				}, //5
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 2.5,
+					duration: 2,
+					displacement: 0.002,
+					direction: "right"
+				}, //7
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 1.5,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				}, //9
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.05,
+					direction: "left"
+				},
+				{ direction: "normal" } //11
+			],
+			largeDesktop: [
+				{
+					delay: 0.5,
+					duration: 2,
+					displacement: 0.1,
+					direction: "left"
+				}, //1
+				{
+					delay: 1.8,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				},
+				{
+					delay: 0.8,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				}, //3
+				{
+					delay: 1,
+					duration: 2,
+					displacement: 0.02,
+					direction: "right"
+				},
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.05,
+					direction: "left"
+				}, //5
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 2.5,
+					duration: 2,
+					displacement: 0.002,
+					direction: "right"
+				}, //7
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.102,
+					direction: "left"
+				},
+				{
+					delay: 1.5,
+					duration: 2,
+					displacement: 0.05,
+					direction: "right"
+				}, //9
+				{
+					delay: 1.3,
+					duration: 2,
+					displacement: 0.05,
+					direction: "left"
+				},
+				{ direction: "normal" } //11
+			]
+		},
 
 		container: document.createElement("div"),
 
 		selectedRider: 1,
-
-		/** TODO: set dimensions using a bike in the atlas sheet */
-		dimensions: {
-			width: 98,
-			height: 219,
-			normal: {
-				cx: 32.5,
-				cy: 49
-			},
-			left: {
-				cx: 49,
-				cy: 109.5
-			},
-			right: {
-				cx: 49,
-				cy: 109.5
-			}
-		},
 
 		orientation: "normal",
 
@@ -144,7 +347,7 @@
 		sway: function() {
 			var bikeContainer = Bike.container;
 
-			var path = Bike.paths[Game.level - 1];
+			var path = Bike.paths[Game.platform][Game.level - 1];
 			var direction = path.direction;
 			bikeContainer.style.background =
 				"url(" +
@@ -160,7 +363,6 @@
 		},
 
 		turn: function(displacement, direction) {
-			console.log(displacement, direction);
 			Bike.position = [
 				direction === "left"
 					? -(displacement * bgImage.clientWidth)
@@ -181,6 +383,8 @@
 				onComplete: Bike.setToNormal
 			});
 		},
+
+		moveToFinish() {},
 
 		renderOnStartPosition: function() {
 			var startPos = Bike.getStartPosition();
@@ -243,32 +447,81 @@
 
 			var startPos = -(bgImage.height - vh);
 			Terrain.position = startPos;
-			bgImage.style.transform = "translate(0px, " + startPos + "px)";
+            bgImage.style.transform = "translate(0px, " + startPos + "px)";
+            setTimeout(Timer.showCountdown, 1000);
 		}
 	};
 
 	var Timer = {
-		time: 0,
+		time: {
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+        },
 
-		currentQuestionTime: 0,
+        currentQuestionTime: 0,
 
-		start: function() {
-			Timer.currentQuestionTime = new Date();
-		},
+        container: document.querySelector(".timer-counter"),
 
-		end: function() {
-			var now = new Date();
-			var elapsedTime = (now - Timer.currentQuestionTime) / 1000;
-			Timer.time += elapsedTime;
-		},
+        timeoutHandle: null,
 
-		penalty: function() {
-			Timer.time += 15;
-		},
+        showCountdown: function() {
+            var timer = Timer.container;
+            timer.textContent = 3;
+
+            function change(i) {
+                return function() { 
+                    timer.textContent = i !== 0 ? ( i !== 1 ? i - 1 : "GO!" ) : "";
+                    if ( i === 0 ) {
+                        Game.run();
+                    } 
+                };
+            }
+
+            for(var i = 3; i >= 0; i--) {
+                var changeFunction = change(i);
+                setTimeout(changeFunction, ( 3 - ( i - 1) ) * 1000);
+            };
+        },
+        
+        add: function(penalty) {
+            var seconds = Timer.time.seconds;
+            var minutes = Timer.time.minutes;
+            var hours = Timer.time.hours;
+            if ( !penalty ) {
+                seconds++;
+            } else {
+                seconds += 15;
+            }
+            if (seconds >= 60) {
+                seconds = seconds % 60;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+            Timer.time = {
+                seconds: seconds,
+                minutes: minutes,
+                hours: hours
+            };
+            Timer.container.textContent = Timer.getTime();
+            if ( Game.status === "pausedForQuestion" ) {
+                Timer.timeoutHandle = setTimeout(Timer.add, 1000);
+            }
+        },
+
+        getTime: function() {
+            var seconds = Timer.time.seconds;
+            var minutes = Timer.time.minutes;
+            var hours = Timer.time.hours;
+            return (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        },
 
 		reset: function() {
 			Timer.time = 0;
-		}
+        }
 	};
 
 	var Game = {
@@ -293,20 +546,22 @@
 			terrain: false,
 			bike: false,
 			submit: false
-		},
+        },
+        
+        restartAttempts: 0,
 
-		timer: Timer,
+        status: "countingDown",
 
 		fetchQuestions: function() {
 			Data.fetch("/userData").then(
 				function(response) {
 					Game.userData = response.userInfo.shift();
-					Game.questions = Util.randomize(response.userInfo);
-					console.log("Game questions ready");
+                    Game.questions = Util.randomize(response.userInfo);
+                    Game.selectRider(Game.userData.riderName);
 				},
 				function(err) {
 					Game.error.questions = true;
-					console.log("Error while fetching questions");
+					/** TODO: Handle error */
 				}
 			);
 		},
@@ -317,9 +572,15 @@
 				!Game.error.terrain &&
 				!Game.error.bike
 			) {
+                Timer.container.textContent = "00:00:00";
+                Game.status = "running";
 				Game.firstLevel();
 			} else {
-				/** TODO: Handle errors */
+                if ( Game.restartAttempts < 10 ) {
+                    setTimeout(Game.run, 1000);
+                } else {
+                    /** TODO: Handle errors */
+                }
 			}
 		},
 
@@ -327,20 +588,27 @@
 			if (answer) {
 				setTimeout(Timer.end, 0);
 			} else {
-				setTimeout(Timer.penalty, 0);
+				setTimeout(function() {
+					Timer.end();
+					Timer.penalty();
+				}, 0);
 			}
 			Game.levelUp();
 		},
 
 		showQuestion: function() {
+            Game.status = "pausedForQuestion";
 			Question.show();
-			setTimeout(Timer.start, 0);
+			// setTimeout(Timer.start, 0);
 		},
 
 		firstLevel: function() {
 			var yPos = -(bgImage.clientHeight - Terrain.step);
 			Terrain.position = yPos;
-			setTimeout(Bike.sway, Bike.paths[Game.level].delay * 1000);
+			setTimeout(
+				Bike.sway,
+				Bike.paths[Game.platform][Game.level].delay * 1000
+			);
 			Game.level++;
 			TweenMax.to(bgImage, 3, {
 				ease: Terrain.easeAnimation,
@@ -358,7 +626,7 @@
 			var yPos = (Terrain.position = -(
 				Math.abs(Terrain.position) - Terrain.step
 			));
-			var path = Bike.paths[Game.level];
+			var path = Bike.paths[Game.platform][Game.level];
 			if (path.direction !== "normal") {
 				setTimeout(Bike.sway, path.delay * 1000);
 			}
@@ -374,8 +642,8 @@
 					css: { transform: "translate(0px, " + yPos + "px)" },
 					onComplete: Game.showQuestion
 				});
-                // TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
-                // TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: function() {} });
+				// TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: Game.levelUp });
+				// TweenMax.to(bgImage, 4, { ease: Terrain.easeAnimation, css: { transform: "translate(0px, " + yPos + "px)" }, onComplete: function() {} });
 			}
 			Game.level++;
 		},
@@ -385,42 +653,22 @@
 			Terrain.render();
 		},
 
-		/** TODO: Remove keyup listeners */
-		listeners: function() {
-			document.addEventListener("keyup", function(e) {
-				switch (e.which) {
-					case 37:
-						Game.checkAnswer(true);
-						break;
-					case 38:
-						Game.run();
-						break;
-					case 39:
-						Game.checkAnswer(false);
-						break;
-					case 40:
-						console.log(Timer.time);
-						break;
-					case 82:
-						Game.reset();
-						break;
-				}
-			});
-		},
-
-		selectRider: function(index) {
-			Game.selectedRider = index;
+		selectRider: function(riderName) {
+            Bike.selectedRider = riderName === "CS Santosh" ? 0 : 1;
+            Bike.render();
 		},
 
 		complete: function() {
-            console.log();
-			var data = {
-				userId: "123ABC",
-				time: Timer.time
-			}; /** TODO: Replace with actual data */
-			data = encodeURIComponent(JSON.stringify(data));
-			Data.post("/getscoredetails", data).then(
-				function(response) {},
+            var formData = new FormData();
+            formData.set("userId", Game.userData.userId);
+            formData.set("time", Timer.getTime());
+			
+			Data.post("/getscoredetails", formData).then(
+				function(response) {
+                    if ( response !== submit ) {
+                        /** TODO: Handle submit error */
+                    }
+                },
 				function(error) {
 					Game.error.submit = true;
 					/** TODO: Handle submit error */
@@ -484,8 +732,8 @@
 					"true"
 				);
 				xmlhttp.setRequestHeader(
-					"Content-type",
-					"application/x-www-form-urlencoded"
+					"authToken",
+					"Basic SGVyb21vdG9zcG9ydHM6SE1TQDIwMTgh"
 				);
 				xmlhttp.send(data);
 			});
@@ -513,7 +761,7 @@
 				zIndex: 2
 			})
 			.from(".question-content-wrap", 0.4, { opacity: 0 })
-			.from(".question-content-wrap-bg", 0.5, { height: 0, opacity: 0 })
+			.from(".question-content-wrap-bg", 0.5, { height: 0, opacity: 0, onComplete: Timer.add })
 			.from(".question-copy", 0.3, { opacity: 0 })
 			.staggerFrom(
 				".question-options",
@@ -540,11 +788,11 @@
 					element.addEventListener("click", function(e) {
 						var option = e.target.classList[1]; // the second class name is the option selected
                         var answer = Question.checkAnswer(option);
-                        Question.hide();
-						if (answer) {
-							setTimeout(Timer.end, 0);
-						} else {
-							setTimeout(Timer.penalty, 0);
+                        clearTimeout(Timer.timeoutHandle);
+                        Game.status = "running";
+						Question.hide();
+						if (!answer) {
+                            Timer.add(true); // first argument of Timer.add() is penalty
 						}
 						Game.levelUp();
 					});
@@ -576,7 +824,6 @@
 
 	bikeAtlas.onload = function() {
 		Game.bike = true;
-		Bike.render();
 	};
 	bikeAtlas.onerror = function() {
 		Game.error.bike = true;
@@ -585,13 +832,5 @@
 	bikeAtlas.src = Bike.image;
 
 	Game.fetchQuestions();
-	Game.listeners();
 	Question.listeners();
-
-	/** TODO: Remove these lines */
-	window.Game = Game;
-	window.Bike = Bike;
-	window.Terrain = Terrain;
-	window.Timer = Timer;
-	window.Question = Question;
 })();
