@@ -38,7 +38,10 @@ body {
 		padding: 0 16px;
 	}
 }
+/* header css start */
 
+   header { padding: 50px 88px; position: fixed; width: 100%; } @media only screen and (max-width: 1500px) { header { padding: 30px 50px; } } @media only screen and (max-width: 768px) { header { padding: 20px 20px; } } .links-list { float: right; } .logo-wrap { display: block; width: 100%; max-width: 222px; float: left; } @media only screen and (max-width: 1500px) { .logo-wrap { max-width: 150px; } } @media only screen and (max-width: 768px) { .logo-wrap { max-width: 100px; } } @media only screen and (max-width: 680px) { .logo-wrap { max-width: 80px; } }
+/* header css end  */
 .popup-header-wrap {
 	background-image: url(./assets/images/question-bg-3.png);
 	padding: 30px 20px 20px 20px;
